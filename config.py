@@ -1,6 +1,3 @@
-import os
-import tempfile
-
 
 class BaseConfig(object):
     """Base configuration class."""
