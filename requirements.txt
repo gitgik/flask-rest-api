@@ -4,5 +4,6 @@ Flask-SQLAlchemy==2.2
 itsdangerous==0.24
 Jinja2==2.9.6
 MarkupSafe==1.0
+psycopg2==2.7.1
 SQLAlchemy==1.1.9
 Werkzeug==0.12.1
