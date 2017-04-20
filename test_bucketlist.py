@@ -19,13 +19,13 @@ class BucketlistTestCase(unittest.TestCase):
 
     def test_bucketlist_creation(self):
         """Test API can create a bucketlist (POST request)"""
-        res = self.client().post('/bucketlists', data=self.bucketlist)
+        res = self.client().post('/bucketlists/', data=self.bucketlist)
         self.assertEqual(res.status_code, 201)
         self.assertIn('Go to Borabora for vacay', res.data)
 
     def test_api_can_get_all_bucketlists(self):
         """Test API can get a bucketlist (GET request)."""
-        res = self.client().get('/bucketlists')
+        res = self.client().get('/bucketlists/')
         self.assertEqual(res.status_code, 200)
         self.assertIn('Go to Borabora for vacay', res.data)
 
@@ -46,8 +46,7 @@ class BucketlistTestCase(unittest.TestCase):
             '/bucketlists/1',
             data={
                 "name": "Dont just eat, but also pray and love :-)"
-            },
-            headers=headers)
+            })
         self.assertEqual(rv.status_code, 200)
         results = self.client().get('/bucketlists/1')
         self.assertIn('Dont just eat', results.data)
