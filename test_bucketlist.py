@@ -1,4 +1,5 @@
 import unittest
+import os
 from app import create_app, db
 
 
@@ -12,6 +13,22 @@ class BucketlistTestCase(unittest.TestCase):
         with self.app.app_context():
             # create all tables
             db.create_all()
+
+    def test_bucketlist_creation(self):
+        """Test API can create a bucketlist (POST request)"""
+        pass
+
+    def test_bucketlist_retrieval(self):
+        """Test API can get a bucketlist (GET request)."""
+        pass
+
+    def test_bucketlist_can_be_edited(self):
+        """Test API can edit an existing bucketlist. (PUT request)"""
+        pass
+
+    def test_bucketlist_deletion(self):
+        """Test API can delete an existing bucketlist. (DELETE request)."""
+        pass
 
     def tearDown(self):
         """teardown all initialized variables."""
