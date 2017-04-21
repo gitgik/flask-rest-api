@@ -29,9 +29,24 @@ def create_app(config_name):
             if name:
                 bucketlist = Bucketlist(name=name)
                 bucketlist.save()
-                return jsonify(**bucketlist)
+                return jsonify(
+                    {
+                        bucketlist.id: {
+                            'name': bucketlist.name,
+                            'date_created': bucketlist.date_created,
+                            'date_modified': bucketlist.date_modified
+                        }
+                    })
         else:
             # GET
-            return
+            bucketlists = Bucketlist.get_all()
+            res = {}
+            for bucketlist in bucketlists:
+                res[bucketlist.id] = {
+                    'name': bucketlist.name,
+                    'date_created': bucketlist.date_created,
+                    'date_modified': bucketlist.date_modified
+                }
+            return jsonify(res)
 
     return app
