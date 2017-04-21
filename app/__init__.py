@@ -3,7 +3,7 @@ import json
 from flask_api import FlaskAPI, status
 from flask_sqlalchemy import SQLAlchemy
 
-from flask import request
+from flask import request, jsonify
 
 # local import
 
@@ -14,6 +14,7 @@ db = SQLAlchemy()
 
 
 def create_app(config_name):
+
     from app.models import Bucketlist
 
     app = FlaskAPI(__name__, instance_relative_config=True)
@@ -28,9 +29,7 @@ def create_app(config_name):
             if name:
                 bucketlist = Bucketlist(name=name)
                 bucketlist.save()
-                return {
-                    'bucketlist': json.loads(bucketlist)
-                    }, status.HTTP_201_CREATED
+                return jsonify(**bucketlist)
         else:
             # GET
             return
