@@ -40,14 +40,17 @@ def create_app(config_name):
         else:
             # GET
             bucketlists = Bucketlist.get_all()
-            res = {}
+            results = []
+
             for bucketlist in bucketlists:
-                res[bucketlist.id] = {
+                obj = {
+                    'id': bucketlist.id,
                     'name': bucketlist.name,
                     'date_created': bucketlist.date_created,
                     'date_modified': bucketlist.date_modified
                 }
-            response = jsonify(res)
+                results.append(obj)
+            response = jsonify(results)
             response.status_code = 200
             return response
 
@@ -61,7 +64,9 @@ def create_app(config_name):
 
         if request.method == "DELETE":
             bucketlist.delete()
-            return {"message": "bucketlist {} deleted successfully".format(bucketlist.id)}, 200
+            return {
+                "message": "bucketlist {} deleted ".format(bucketlist.id)
+            }, 200
         elif request.method == 'PUT':
             name = str(request.data.get('name', ''))
             bucketlist.name = name
