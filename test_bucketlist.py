@@ -9,7 +9,7 @@ class BucketlistTestCase(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
-        self.app = create_app(config_name=os.getenv("APP_SETTINGS"))
+        self.app = create_app(config_name="testing")
         self.client = self.app.test_client
         self.bucketlist = {'name': 'Go to Borabora for vacay'}
 
