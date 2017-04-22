@@ -1,7 +1,7 @@
 import unittest
 import os
 from app import create_app, db
-
+import json
 
 class BucketlistTestCase(unittest.TestCase):
     """This class represents the bucketlist test case"""
@@ -33,10 +33,12 @@ class BucketlistTestCase(unittest.TestCase):
 
     def test_api_can_get_bucketlist_by_id(self):
         """Test API can get a single bucketlist by using it's id."""
-        bid = 1
-        res = self.client().get('/bucketlists/{}/'.format(bid))
-        self.assertEqual(res.status_code, 200)
-        self.assertIn('Go to Borabora', res.data)
+        rv = self.client().post('/bucketlists/', data=self.bucketlist)
+        self.assertEqual(rv.status_code, 201)
+        result_in_json = json.loads(rv.data.decode('utf-8').replace("'", "\""))
+        result = self.client().get('/bucketlists/{}'.format(result_in_json['id']))
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('Go to Borabora', str(result.data))
 
     def test_bucketlist_can_be_edited(self):
         """Test API can edit an existing bucketlist. (PUT request)"""
@@ -51,7 +53,7 @@ class BucketlistTestCase(unittest.TestCase):
             })
         self.assertEqual(rv.status_code, 200)
         results = self.client().get('/bucketlists/1')
-        self.assertIn('Dont just eat', results.data)
+        self.assertIn('Dont just eat', str(results.data))
 
     def test_bucketlist_deletion(self):
         """Test API can delete an existing bucketlist. (DELETE request)."""
@@ -61,8 +63,8 @@ class BucketlistTestCase(unittest.TestCase):
         self.assertEqual(rv.status_code, 201)
         rv = self.client().delete('/bucketlists/1')
         self.assertEqual(rv.status_code, 200)
-        results = self.client().get('/bucketlists/1')
-        self.assertIn('No such bucketlist', results.data)
+        result = self.client().get('/bucketlists/1')
+        self.assertEqual(result.status_code, 404)
 
     def tearDown(self):
         """teardown all initialized variables."""
