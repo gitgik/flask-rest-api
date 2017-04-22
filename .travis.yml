@@ -2,9 +2,16 @@ language: python
 python:
   - "3.6"
 
+services:
+  - postgresql
+
 # command to install dependencies
 install:
   - pip install -r requirements.txt
+
+before_script:
+  - psql -c 'create database flask_api;' -U postgres
+
 # command to run tests
 script: coverage run test_bucketlist.py
 after_success: coveralls
