@@ -3,7 +3,7 @@ import json
 from flask_api import FlaskAPI, status
 from flask_sqlalchemy import SQLAlchemy
 
-from flask import request, jsonify
+from flask import request, jsonify, abort
 
 # local import
 
@@ -29,14 +29,12 @@ def create_app(config_name):
             if name:
                 bucketlist = Bucketlist(name=name)
                 bucketlist.save()
-                response = jsonify(
-                    {
-                        bucketlist.id: {
-                            'name': bucketlist.name,
-                            'date_created': bucketlist.date_created,
-                            'date_modified': bucketlist.date_modified
-                        }
-                    })
+                response = jsonify({
+                    'id': bucketlist.id,
+                    'name': bucketlist.name,
+                    'date_created': bucketlist.date_created,
+                    'date_modified': bucketlist.date_modified
+                })
                 response.status_code = 201
                 return response
         else:
@@ -50,6 +48,41 @@ def create_app(config_name):
                     'date_modified': bucketlist.date_modified
                 }
             response = jsonify(res)
+            response.status_code = 200
+            return response
+
+    @app.route('/bucketlists/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+    def bucketlist_manipulation(id, **kwargs):
+
+        bucketlist = Bucketlist.query.filter_by(id=id).first()
+        if not bucketlist:
+            # Raise an HTTPException with a 404 not found status code
+            abort(404)
+
+        if request.method == 'DELETE':
+            bucketlist.delete()
+            return {}, 204
+
+        elif request.method == 'PUT':
+            name = str(request.data.get('name', ''))
+            bucketlist.name = name
+            bucketlist.save()
+            response = jsonify({
+                'id': bucketlist.id,
+                'name': bucketlist.name,
+                'date_created': bucketlist.date_created,
+                'date_modified': bucketlist.date_modified
+            })
+            response.status_code = 200
+            return response
+        else:
+            # GET
+            response = jsonify({
+                'id': bucketlist.id,
+                'name': bucketlist.name,
+                'date_created': bucketlist.date_created,
+                'date_modified': bucketlist.date_modified
+            })
             response.status_code = 200
             return response
 
