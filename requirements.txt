@@ -1,6 +1,7 @@
 alembic==0.9.1
 autoenv==1.0.0
 click==6.7
+coverage==4.0.3
 Flask==0.12.1
 Flask-API==0.7.1
 Flask-Migrate==2.0.3
@@ -12,6 +13,10 @@ Mako==1.0.6
 Markdown==2.6.8
 MarkupSafe==1.0
 psycopg2==2.7.1
+python-coveralls==2.9.1
 python-editor==1.0.3
+PyYAML==3.12
+requests==2.13.0
+six==1.10.0
 SQLAlchemy==1.1.9
 Werkzeug==0.12.1
