@@ -53,27 +53,28 @@ A flask-driven restful API for Bucketlist interactions
 
 * #### Migrations
     On your psql console, create your database:
-       ```
-       > CREATE DATABASE flask_api;
-       ```
+    ```
+    > CREATE DATABASE flask_api;
+    ```
     Then, make and apply your Migrations
-       ```
-       (venv)$ python manage.py db init
-       (venv)$ python manage.py db migrate
-       ```
+    ```
+    (venv)$ python manage.py db init
+
+    (venv)$ python manage.py db migrate
+    ```
 
     And finally, migrate your migrations to persist on the DB
-       ```
-       (venv)$ python manage.py db upgrade
-       ```
+    ```
+    (venv)$ python manage.py db upgrade
+    ```
 
 * #### Running It
     On your terminal, run the server using this one simple command:
     ```
-    $ flask run
+    (venv)$ flask run
     ```
     You can now access the app on your local browser by using
     ```
-      http://localhost:5000/bucketlists/
+    http://localhost:5000/bucketlists/
     ```
     Or test creating bucketlists using Postman
