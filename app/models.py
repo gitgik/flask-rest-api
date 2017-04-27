@@ -33,7 +33,7 @@ class Bucketlist(db.Model):
     date_modified = db.Column(
         db.DateTime, default=db.func.current_timestamp(),
         onupdate=db.func.current_timestamp())
-
+    created_by = db.Column(db.Integer, db.ForeignKey(User.id))
     user = db.relationship('User')
 
     def __init__(self, name):
