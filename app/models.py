@@ -2,10 +2,32 @@ from app import db
 import hashlib
 
 
+class User(db.Model):
+    """Maps to users table """
+
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(256), nullable=False, unique=True)
+    password = db.Column(db.String(256))
+    bucketlists = db.relationship(
+        'Bucketlist', order_by='Bucketlist.id')
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = hashlib.sha512(password).hexdigest()
+
+    def password_is_valid(self, password):
+        """Validates user password """
+        return self.password == hashlib.sha512(password).hexdigest()
+
+
 class Bucketlist(db.Model):
     """This class represents the bucketlist table."""
 
     __tablename__ = 'bucketlists'
+
+    user = db.relationship('User')
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
@@ -32,23 +54,3 @@ class Bucketlist(db.Model):
 
     def __repr__(self):
         return "<Bucketlist: {}>".format(self.name)
-
-
-class User(db.Model):
-    """Maps to users table """
-
-    __tablename__ = 'users'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(256), nullable=False, unique=True)
-    password = db.Column(db.String(256))
-    bucketlists = db.relationship(
-        'Bucketlist', order_by='Bucketlist.id')
-
-    def __init__(self, username, password):
-        self.username = username
-        self.password = hashlib.sha512(password).hexdigest()
-
-    def password_is_valid(self, password):
-        """Validates user password """
-        return self.password == hashlib.sha512(password).hexdigest()
