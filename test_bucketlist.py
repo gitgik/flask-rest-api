@@ -16,6 +16,8 @@ class BucketlistTestCase(unittest.TestCase):
         # binds the app to the current context
         with self.app.app_context():
             # create all tables
+            db.session.close()
+            db.drop_all()
             db.create_all()
 
     def test_bucketlist_creation(self):
@@ -48,13 +50,16 @@ class BucketlistTestCase(unittest.TestCase):
             '/bucketlists/',
             data={'name': 'Eat, pray and love'})
         self.assertEqual(rv.status_code, 201)
+        # get the json with the bucketlist
+        result_in_json = json.loads(rv.data.decode('utf-8').replace("'", "\""))
         rv = self.client().put(
-            '/bucketlists/1',
+            '/bucketlists/{}'.format(result_in_json['id']),
             data={
                 "name": "Dont just eat, but also pray and love :-)"
             })
         self.assertEqual(rv.status_code, 200)
-        results = self.client().get('/bucketlists/1')
+        results = self.client().get(
+            '/bucketlists/{}'.format(result_in_json['id']))
         self.assertIn('Dont just eat', str(results.data))
 
     def test_bucketlist_deletion(self):
@@ -63,18 +68,14 @@ class BucketlistTestCase(unittest.TestCase):
             '/bucketlists/',
             data={'name': 'Eat, pray and love'})
         self.assertEqual(rv.status_code, 201)
-        res = self.client().delete('/bucketlists/1')
+        # get the bucketlist in json
+        result_in_json = json.loads(rv.data.decode('utf-8').replace("'", "\""))
+        res = self.client().delete(
+            '/bucketlists/{}'.format(result_in_json['id']))
         self.assertEqual(res.status_code, 200)
         # Test to see if it exists, should return a 404
         result = self.client().get('/bucketlists/1')
         self.assertEqual(result.status_code, 404)
-
-    def tearDown(self):
-        """teardown all initialized variables."""
-        with self.app.app_context():
-            # drop all tables
-            db.session.remove()
-            db.drop_all()
 
 
 # Make the tests conveniently executable
