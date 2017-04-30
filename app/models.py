@@ -8,13 +8,13 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(256), nullable=False, unique=True)
-    password = db.Column(db.String(256))
+    email = db.Column(db.String(256), nullable=False, unique=True)
+    password = db.Column(db.String(256), nullable=False)
     bucketlists = db.relationship(
         'Bucketlist', order_by='Bucketlist.id', cascade="all, delete-orphan")
 
-    def __init__(self, username, password):
-        self.username = username
+    def __init__(self, email, password):
+        self.email = email
         self.password = hashlib.sha512(password).hexdigest()
 
     def password_is_valid(self, password):
