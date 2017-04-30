@@ -1,6 +1,8 @@
 from app import db
 from flask_bcrypt import Bcrypt
 from flask import current_app
+import jwt
+from datetime import datetime, timedelta
 
 
 class User(db.Model):
@@ -28,19 +30,22 @@ class User(db.Model):
 
     def generate_token(self, user_id):
         """ Generates the access token"""
+
         try:
             payload = {
-                'exp': datetime.utcnow() + timedelta(minutes=60)
+                'exp': datetime.utcnow() + timedelta(minutes=60),
+                'iat': datetime.utcnow(),
+                'sub': user_id
             }
             jwt_string = jwt.encode(
                 payload,
-                current_app.config.get('SECRET_KEY'),
+                current_app.config.get('SECRET'),
                 algorithm='HS256'
             )
             return jwt_string
 
         except Exception as e:
-            return e
+            return str(e)
 
 
 class Bucketlist(db.Model):

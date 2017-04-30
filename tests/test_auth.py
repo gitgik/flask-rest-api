@@ -40,11 +40,13 @@ class AuthTestCase(unittest.TestCase):
 
     def test_user_login(self):
         """Test registered user can login."""
-        res = self.client().post('/auth/login', data=self.user_data)
-        result = json.loads(res.data.decode())
-        self.assertEqual(res.status_code, 200)
+        res = self.client().post('/auth/register', data=self.user_data)
+        self.assertEqual(res.status_code, 201)
+        login_res = self.client().post('/auth/login', data=self.user_data)
+        result = json.loads(login_res.data.decode())
         self.assertEqual(result['message'], "You logged in successfully.")
-        self.assertTrue(result['auth_token'])
+        self.assertEqual(login_res.status_code, 200)
+        self.assertTrue(result['access_token'])
 
     def test_registered_user_login(self):
         """Test non registered users cannot login."""
@@ -55,4 +57,5 @@ class AuthTestCase(unittest.TestCase):
         res = self.client().post('/auth/login', data=not_a_user)
         result = json.loads(res.data.decode())
         self.assertEqual(res.status_code, 401)
-        self.assertEqual(result['message'], "Unauthorized. Please register")
+        self.assertEqual(
+            result['message'], "Invalid email or password, Please try again")
