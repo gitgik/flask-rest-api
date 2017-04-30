@@ -38,9 +38,9 @@ class BucketlistTestCase(unittest.TestCase):
         """Test API can get a single bucketlist by using it's id."""
         rv = self.client().post('/bucketlists/', data=self.bucketlist)
         self.assertEqual(rv.status_code, 201)
-        result_in_json = json.loads(rv.data.decode('utf-8').replace("'", "\""))
+        results = json.loads(rv.data.decode())
         result = self.client().get(
-            '/bucketlists/{}'.format(result_in_json['id']))
+            '/bucketlists/{}'.format(results['id']))
         self.assertEqual(result.status_code, 200)
         self.assertIn('Go to Borabora', str(result.data))
 
@@ -51,15 +51,15 @@ class BucketlistTestCase(unittest.TestCase):
             data={'name': 'Eat, pray and love'})
         self.assertEqual(rv.status_code, 201)
         # get the json with the bucketlist
-        result_in_json = json.loads(rv.data.decode('utf-8').replace("'", "\""))
+        results = json.loads(rv.data.decode())
         rv = self.client().put(
-            '/bucketlists/{}'.format(result_in_json['id']),
+            '/bucketlists/{}'.format(results['id']),
             data={
                 "name": "Dont just eat, but also pray and love :-)"
             })
         self.assertEqual(rv.status_code, 200)
         results = self.client().get(
-            '/bucketlists/{}'.format(result_in_json['id']))
+            '/bucketlists/{}'.format(results['id']))
         self.assertIn('Dont just eat', str(results.data))
 
     def test_bucketlist_deletion(self):
@@ -69,9 +69,9 @@ class BucketlistTestCase(unittest.TestCase):
             data={'name': 'Eat, pray and love'})
         self.assertEqual(rv.status_code, 201)
         # get the bucketlist in json
-        result_in_json = json.loads(rv.data.decode('utf-8').replace("'", "\""))
+        results = json.loads(rv.data.decode())
         res = self.client().delete(
-            '/bucketlists/{}'.format(result_in_json['id']))
+            '/bucketlists/{}'.format(results['id']))
         self.assertEqual(res.status_code, 200)
         # Test to see if it exists, should return a 404
         result = self.client().get('/bucketlists/1')
