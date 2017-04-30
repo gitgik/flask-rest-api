@@ -35,7 +35,6 @@ class Bucketlist(db.Model):
         onupdate=db.func.current_timestamp())
     created_by = db.Column(db.Integer, db.ForeignKey(User.id))
 
-
     def __init__(self, name):
         """initialize with name."""
         self.name = name
