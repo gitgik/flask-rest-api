@@ -9,6 +9,9 @@ from flask import request, jsonify, abort
 
 from instance.config import app_config
 
+# For password hashing
+from flask_bcrypt import Bcrypt
+
 # initialize db
 db = SQLAlchemy()
 
@@ -18,6 +21,8 @@ def create_app(config_name):
     from app.models import Bucketlist
 
     app = FlaskAPI(__name__, instance_relative_config=True)
+
+    bcrypt = Bcrypt(app)
     app.config.from_object(app_config[config_name])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
@@ -89,5 +94,8 @@ def create_app(config_name):
             })
             response.status_code = 200
             return response
+
+    from .auth.views import auth_blueprint
+    app.register_blueprint(auth_blueprint)
 
     return app
