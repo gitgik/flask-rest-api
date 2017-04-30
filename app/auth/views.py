@@ -6,9 +6,10 @@ from app.models import User
 
 
 class RegistrationView(MethodView):
-    """This class registers a new user."""
+    """This class-based view registers a new user."""
 
     def post(self):
+        # Query to see if the user already exists
         user = User.query.filter_by(email=request.data['email']).first()
 
         if not user:
@@ -25,6 +26,7 @@ class RegistrationView(MethodView):
                     'info': 'Please log in to get access.'
                 }
                 return make_response(jsonify(response)), 201
+
             except Exception as e:
                 response = {
                     'message': str(e)
@@ -37,8 +39,10 @@ class RegistrationView(MethodView):
 
             return make_response(jsonify(response)), 202
 
+# Define the API resource
+registration_view = RegistrationView.as_view('registration_view')
 
-registration_view = RegistrationView.as_view('register_view')
+# Add the url rule for registering a user
 auth_blueprint.add_url_rule(
     '/auth/register',
     view_func=registration_view,
