@@ -1,5 +1,5 @@
 from app import db
-import hashlib
+from flask_bcrypt import Bcrypt
 
 
 class User(db.Model):
@@ -15,11 +15,15 @@ class User(db.Model):
 
     def __init__(self, email, password):
         self.email = email
-        self.password = hashlib.sha512(password).hexdigest()
+        self.password = Bcrypt().generate_password_hash(password).decode()
 
     def password_is_valid(self, password):
         """Validates user password """
-        return self.password == hashlib.sha512(password).hexdigest()
+        return Bcrypt().check_password_hash(self.password, password)
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
 
 class Bucketlist(db.Model):
