@@ -30,6 +30,11 @@ def create_app(config_name):
 
     @app.route('/bucketlists/', methods=['POST', 'GET'])
     def bucketlists():
+        # get the access token
+        auth_header = request.headers.get('Authorization')
+        access_token = auth_header.split(" ")[1]
+        print (access_token)
+
         if request.method == "POST":
             name = str(request.data.get('name', ''))
             if name:

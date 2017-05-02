@@ -33,7 +33,7 @@ class User(db.Model):
 
         try:
             payload = {
-                'exp': datetime.utcnow() + timedelta(minutes=60),
+                'exp': datetime.utcnow() + timedelta(minutes=1),
                 'iat': datetime.utcnow(),
                 'sub': user_id
             }
@@ -46,6 +46,17 @@ class User(db.Model):
 
         except Exception as e:
             return str(e)
+
+    @staticmethod
+    def decode_token(token):
+        """Decode the access token from the Authorization header."""
+        try:
+            payload = jwt.decode(token, current_app.config.get('SECRET'))
+            return payload['sub']
+        except jwt.ExpiredSignatureError:
+            return "Expired token. Please log in to get a new token"
+        except jwt.InvalidTokenError:
+            return "Invalid token. Please register or login"
 
 
 class Bucketlist(db.Model):
