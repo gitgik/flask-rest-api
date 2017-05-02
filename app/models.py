@@ -33,7 +33,7 @@ class User(db.Model):
 
         try:
             payload = {
-                'exp': datetime.utcnow() + timedelta(minutes=1),
+                'exp': datetime.utcnow() + timedelta(minutes=5),
                 'iat': datetime.utcnow(),
                 'sub': user_id
             }
@@ -72,9 +72,10 @@ class Bucketlist(db.Model):
         onupdate=db.func.current_timestamp())
     created_by = db.Column(db.Integer, db.ForeignKey(User.id))
 
-    def __init__(self, name):
+    def __init__(self, name, created_by):
         """initialize with name."""
         self.name = name
+        self.created_by = created_by
 
     def save(self):
         db.session.add(self)
