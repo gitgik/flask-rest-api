@@ -22,8 +22,7 @@ class RegistrationView(MethodView):
                 user.save()
 
                 response = {
-                    'message': 'You registered successfully.',
-                    'info': 'Please log in to get access.'
+                    'message': 'You registered successfully. Please log in.',
                 }
                 return make_response(jsonify(response)), 201
 
@@ -59,7 +58,7 @@ class LoginView(MethodView):
             else:
                 # User does not exist
                 response = {
-                    'message': 'Invalid email or password, Please try again'
+                    'message': 'Invalid email or password, Please try again.'
                 }
                 return make_response(jsonify(response)), 401
 
