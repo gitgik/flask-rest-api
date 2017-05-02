@@ -22,7 +22,7 @@ class RegistrationView(MethodView):
                 user.save()
 
                 response = {
-                    'message': 'You registered successfully. Please log in.',
+                    'message': 'You registered successfully. Please login.',
                 }
                 return make_response(jsonify(response)), 201
 
@@ -33,7 +33,7 @@ class RegistrationView(MethodView):
                 return make_response(jsonify(response)), 401
         else:
             response = {
-                'message': 'User already exists. Please log in.'
+                'message': 'User already exists. Please login.'
             }
 
             return make_response(jsonify(response)), 202

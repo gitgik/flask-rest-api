@@ -26,7 +26,7 @@ class AuthTestCase(unittest.TestCase):
         res = self.client().post('/auth/register', data=self.user_data)
         result = json.loads(res.data.decode())
         self.assertEqual(
-            result['message'], "You registered successfully. Please log in.")
+            result['message'], "You registered successfully. Please login.")
         self.assertEqual(res.status_code, 201)
 
     def test_already_registered_user(self):
@@ -37,7 +37,7 @@ class AuthTestCase(unittest.TestCase):
         self.assertEqual(second_res.status_code, 202)
         result = json.loads(second_res.data.decode())
         self.assertEqual(
-            result['message'], "User already exists. Please log in.")
+            result['message'], "User already exists. Please login.")
 
     def test_user_login(self):
         """Test registered user can login."""
