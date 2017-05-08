@@ -127,6 +127,7 @@ def create_app(config_name):
                 }
                 return make_response(jsonify(response)), 401
 
+    # import the authentication blueprint and register it on the app
     from .auth import auth_blueprint
     app.register_blueprint(auth_blueprint)
 
