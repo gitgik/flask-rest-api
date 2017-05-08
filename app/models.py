@@ -23,7 +23,9 @@ class User(db.Model):
         self.password = Bcrypt().generate_password_hash(password).decode()
 
     def password_is_valid(self, password):
-        """Checks the password against it's hash to validates the user's password"""
+        """
+        Checks the password against it's hash to validates the user's password
+        """
         return Bcrypt().check_password_hash(self.password, password)
 
     def save(self):
@@ -72,6 +74,7 @@ class Bucketlist(db.Model):
 
     __tablename__ = 'bucketlists'
 
+    # define the columns of the table, starting with its primary key
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -81,21 +84,28 @@ class Bucketlist(db.Model):
     created_by = db.Column(db.Integer, db.ForeignKey(User.id))
 
     def __init__(self, name, created_by):
-        """initialize with name."""
+        """Initialize the bucketlist with a name and its creator."""
         self.name = name
         self.created_by = created_by
 
     def save(self):
+        """Save a bucketlist.
+        This applies for both creating a new bucketlist
+        and updating an existing onupdate
+        """
         db.session.add(self)
         db.session.commit()
 
     @staticmethod
-    def get_all():
-        return Bucketlist.query.all()
+    def get_all(user_id):
+        """This method gets all the bucketlists for a given user."""
+        return Bucketlist.query.filter_by(created_by=user_id)
 
     def delete(self):
+        """Deletes a given bucketlist."""
         db.session.delete(self)
         db.session.commit()
 
     def __repr__(self):
+        """Return a representation of a bucketlist instance."""
         return "<Bucketlist: {}>".format(self.name)
