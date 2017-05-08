@@ -45,7 +45,7 @@ class User(db.Model):
                 'iat': datetime.utcnow(),
                 'sub': user_id
             }
-            # encode the payload to get an byte string token
+            # create the byte string token using the payload and the SECRET key
             jwt_string = jwt.encode(
                 payload,
                 current_app.config.get('SECRET'),
