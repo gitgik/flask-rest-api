@@ -55,7 +55,8 @@ def create_app(config_name):
 
                 else:
                     # GET
-                    bucketlists = Bucketlist.query.filter_by(created_by=user_id)
+                    # get all the bucketlists for this user
+                    bucketlists = Bucketlist.get_all(user_id)
                     results = []
 
                     for bucketlist in bucketlists:
