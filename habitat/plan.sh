@@ -1,6 +1,6 @@
 pkg_origin=gitgik
 pkg_name=flask-rest-api
-pkg_version=1.0.0
+pkg_version=1.0.1
 pkg_maintainer="jeegiks@gmail.com"
 pkg_upstream_url="https://github.com/gitgik/flask-rest-api"
 pkg_exports=([port]=listening_port)
