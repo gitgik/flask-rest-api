@@ -22,9 +22,8 @@ do_clean() {
 
 do_unpack() {
   # copy the contents of the source directory to the habitat cache path
-  cp -vr $PLAN_CONTEXT/../*  $HAB_CACHE_SRC_PATH/$pkg_dirname
-
-  PROJECT_ROOT="${PLAN_CONTEXT}/.."
+  # cp -vr $PLAN_CONTEXT/../*  $HAB_CACHE_SRC_PATH/$pkg_dirname
+  return 0
 }
 
 do_build() {

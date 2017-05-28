@@ -21,7 +21,7 @@ def create_app(config_name):
     from app.models import Bucketlist, User
 
     app = FlaskAPI(__name__, instance_relative_config=True)
-    # overriding Werkzeug’s built-in password hashing utilities using Bcrypt.
+    # overriding Werkzeugs built-in password hashing utilities using Bcrypt.
     bcrypt = Bcrypt(app)
 
     app.config.from_object(app_config[config_name])
