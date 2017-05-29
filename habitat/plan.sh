@@ -7,10 +7,7 @@ pkg_exports=([port]=listening_port)
 pkg_exposes=(port)
 pkg_deps=(core/python)
 pkg_build_deps=(core/virtualenv)
-pkg_lib_dirs=(lib)
-pkg_bin_dirs=(bin)
-pkg_include_dirs=(include Include)
-pkg_interpreters=(bin/python bin/python3 bin/python3.6)
+pkg_interpreters=(bin/python3.6)
 
 do_verify () {
   return 0
@@ -22,8 +19,16 @@ do_clean() {
 
 do_unpack() {
   # copy the contents of the source directory to the habitat cache path
-  # cp -vr $PLAN_CONTEXT/../*  $HAB_CACHE_SRC_PATH/$pkg_dirname
-  return 0
+  PROJECT_ROOT="${PLAN_CONTEXT}/.."
+
+  mkdir -p $pkg_prefix
+  build_line "Copying project data to $pkg_prefix/"
+  cp -r $PROJECT_ROOT/app $pkg_prefix/
+  cp -r $PROJECT_ROOT/*.py $pkg_prefix/
+  cp -r $PROJECT_ROOT/requirements.txt $pkg_prefix/
+  build_line "Copying .env file with preset variables..."
+  cp -vr $PROJECT_ROOT/.env $pkg_prefix/
+  cp -vr $PROJECT_ROOT/instance $pkg_prefix/
 }
 
 do_build() {
@@ -31,20 +36,15 @@ do_build() {
 }
 
 do_install() {
-
-  # copy the node modules into the package using the pkg_prefix variable
-  mkdir -p ${pkg_prefix}/app/
-  cp -vr app/* ${pkg_prefix}/app/
-
-  mkdir -p ${pkg_prefix}/instance/
-  cp -vr instance/* ${pkg_prefix}/instance/
-
-  cp -vr *.py ${pkg_prefix}/
-  cp -vr requirements.txt ${pkg_prefix}/
-  cp -vr .env ${pkg_prefix}/
-
+  cd $pkg_prefix
+  build_line "Creating virtual environment..."
   virtualenv flask-api
-
+  source flask-api/bin/activate
   source .env
   pip install -r requirements.txt
+
+  # Create migrations
+  python manage.py db init
+  python manage.py db migrate
+  python manage.py db upgrade
 }

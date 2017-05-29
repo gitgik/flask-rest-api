@@ -1,4 +1,4 @@
-#!/Users/Andela_9/projects/flask-rest-api/flask-api/bin/python
+#!/src/flask-api/bin/python
 
 import sys
 import getopt
