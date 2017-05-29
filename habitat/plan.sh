@@ -43,7 +43,7 @@ do_install() {
   cp -vr requirements.txt ${pkg_prefix}/
   cp -vr .env ${pkg_prefix}/
 
-  virtualenv venv
+  virtualenv flask-api
 
   source .env
   pip install -r requirements.txt
