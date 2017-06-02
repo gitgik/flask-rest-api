@@ -1,3 +1,5 @@
-#!/bin/sh
+#!/bin/sh -xe
 #
-ln -sf {{pkg.path}}/run.py {{pkg.svc_var_path}}
+ln -fs /app
+ln -fs /flask-api
+ln -fs /instance/config.py

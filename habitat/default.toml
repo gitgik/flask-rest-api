@@ -1,1 +1,3 @@
 listening_port = 8080
+secret = "abigsecret"
+database_uri = "postgresql://localhost/flask_api"
