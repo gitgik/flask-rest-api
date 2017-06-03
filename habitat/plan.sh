@@ -3,8 +3,8 @@ pkg_name=flask-rest-api
 pkg_version=1.0.1
 pkg_maintainer="jeegiks@gmail.com"
 pkg_upstream_url="https://github.com/gitgik/flask-rest-api"
-pkg_exports=([port]=listening_port)
-pkg_exposes=(port)
+pkg_exports=([port]=listening_port [database_uri]=database_uri [secret]=secret)
+pkg_exposes=(port secret database_uri)
 pkg_deps=(core/python)
 pkg_build_deps=(core/virtualenv)
 pkg_interpreters=(bin/python3.6)
@@ -38,13 +38,7 @@ do_build() {
 do_install() {
   cd $pkg_prefix
   build_line "Creating virtual environment..."
-  virtualenv flask-api
-  source flask-api/bin/activate
-  source .env
+  virtualenv venv
+  source venv/bin/activate
   pip install -r requirements.txt
-
-  # Create migrations
-  # python manage.py db init
-  # python manage.py db migrate
-  # python manage.py db upgrade
 }

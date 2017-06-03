@@ -1,9 +1,0 @@
-#!/bin/sh
-#
-cd {{pkg.svc_var_path}}
-
-# `exec` makes it so the process that the Habitat supervisor uses is
-# `python run.py production`, rather than the run hook itself. `2>&1` makes it so both
-# standard output and standard error go to the standard output stream,
-# so all the logs from the application go to the same place.
-exec python run.py production 2>&1

@@ -1,5 +1,0 @@
-#!/bin/sh -xe
-#
-ln -fs /app
-ln -fs /flask-api
-ln -fs /instance/config.py
