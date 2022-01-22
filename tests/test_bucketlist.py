@@ -44,6 +44,7 @@ class BucketlistTestCase(unittest.TestCase):
             '/bucketlists/',
             headers=dict(Authorization="Bearer " + access_token),
             data=self.bucketlist)
+
         self.assertEqual(res.status_code, 201)
         self.assertIn('Go to Borabora', str(res.data))
 
@@ -55,12 +56,12 @@ class BucketlistTestCase(unittest.TestCase):
 
         res = self.client().post(
             '/bucketlists/',
-            headers=dict(Authorization="Bearer " + access_token),
+            headers={'Authorization': "Bearer " + access_token},
             data=self.bucketlist)
         self.assertEqual(res.status_code, 201)
         res = self.client().get(
             '/bucketlists/',
-            headers=dict(Authorization="Bearer " + access_token),
+            headers={'Authorization': "Bearer " + access_token},
         )
         self.assertEqual(res.status_code, 200)
         self.assertIn('Go to Borabora', str(res.data))
