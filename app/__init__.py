@@ -9,6 +9,8 @@ from flask import request, jsonify, abort, make_response
 
 from instance.config import app_config
 
+from flask_migrate import Migrate, migrate
+
 # For password hashing
 from flask_bcrypt import Bcrypt
 
@@ -27,6 +29,8 @@ def create_app(config_name):
     app.config.from_object(app_config[config_name])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
+    migrate = Migrate(db, app)
+    migrate.init_app(app, db)
 
     @app.route('/bucketlists/', methods=['POST', 'GET'])
     def bucketlists():
